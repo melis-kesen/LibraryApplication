@@ -1,5 +1,7 @@
 import axios from "axios";
-const API = `http://localhost:8080/users`
+const HOST  = process.env.HOST;
+const PORT = process.env.PORT;
+const API = `http://${HOST}:${PORT}/users`;
 
 const UserService = {
   async getUsers() {

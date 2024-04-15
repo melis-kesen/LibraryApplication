@@ -1,5 +1,5 @@
 const User = require('../models/users.model');
-
+const validateUser = require('../validators/users.validators');
 const getUsers = async (req, res) => {
   try {
     const users = await User.findAll();

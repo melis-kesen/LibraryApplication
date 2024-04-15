@@ -90,11 +90,12 @@ export const Library = () => {
   return (
     <div className="card">
       <TabView>
-        <TabPanel header="Users">
+        <TabPanel header="Users" leftIcon="pi pi-user">
           <DataTable value={users} tableStyle={{ minWidth: "50rem" }}>
             <Column field="id" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
+            header="Details"
               body={actionBodyTemplate}
               exportable={false}
               style={{ minWidth: "12rem" }}
@@ -103,11 +104,12 @@ export const Library = () => {
           <br></br>
           {header}
         </TabPanel>
-        <TabPanel header="Books">
+        <TabPanel header="Books" leftIcon="pi pi-book">
           <DataTable value={books} tableStyle={{ minWidth: "50rem" }}>
             <Column field="id" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
+            header="Details"
               body={actionBodyTemplate}
               exportable={false}
               style={{ minWidth: "12rem" }}

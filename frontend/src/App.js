@@ -8,9 +8,8 @@ import { Library } from './Library';
 function App() {
   return (
     <div className="App">
-      
+      <h1 className="App-header"> Library Application </h1>
        <Library></Library>
-    
     </div>
   );
 }

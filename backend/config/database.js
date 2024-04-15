@@ -5,5 +5,4 @@ const sequelize = new Sequelize("Test", "postgres", "rabarba", {
     dialect: "postgres",
   });
 
-// sequelize nesnesini dışa aktar
 module.exports = sequelize;

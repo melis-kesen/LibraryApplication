@@ -1,12 +1,12 @@
-const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); 
+
 module.exports = sequelize.define('User', {
   UserId: {
-    type: DataTypes.STRING,
+    type: NUMBER,
     allowNull: false
   },
   Name: {
-    type: DataTypes.STRING
+    type: STRING
   }
 }, {
   tableName: 'users'

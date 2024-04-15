@@ -1,6 +1,6 @@
 const User = require('../models/books.model');
 
-const getAllBooks = async (req, res) => {
+const getBooks = async (req, res) => {
   try {
     const books = await User.findAll();
     res.json(books);
@@ -21,6 +21,6 @@ const createBook = async (req, res) => {
 };
 
 module.exports = {
-  getAllBooks,
+  getBooks,
   createBook
 };

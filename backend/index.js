@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const express = require('express');
 const app = express();
 const userRoutes = require('./routes/users.route');
+const bookRoutes = require('./routes/books.route');
 const sequelize = require('./config/database'); 
 
 
@@ -20,6 +21,7 @@ app.use(express.json()); // JSON body parser middleware
 
 // Kullanıcı rotalarını kullanmak için
 app.use("/users", userRoutes);
+app.use("/books", bookRoutes);
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');

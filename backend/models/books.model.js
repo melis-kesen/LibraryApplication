@@ -1,12 +1,13 @@
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); 
 
 module.exports = sequelize.define('Book', {
   BookId: {
-    type: NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   Name: {
-    type: STRING
+    type: DataTypes.STRING
   }
 }, {
   tableName: 'books'

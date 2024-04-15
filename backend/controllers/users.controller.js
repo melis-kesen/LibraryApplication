@@ -1,6 +1,6 @@
-const User = require('../models/User');
+const User = require('../models/users.model');
 
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -10,7 +10,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -20,3 +20,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
+module.exports = {
+  getAllUsers,
+  createUser
+};

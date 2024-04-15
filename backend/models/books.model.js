@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 
-const Book = sequelize.define('Book', {
+module.exports = sequelize.define('Book', {
   BookId: {
     type: DataTypes.STRING,
     allowNull: false

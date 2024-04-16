@@ -1,8 +1,8 @@
 const config = require("../config/config.js");
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize(config.TEST.DB, config.TEST.USER, config.TEST.PASSWORD, {
-  host: config.TEST.HOST,
+/*const sequelize = new Sequelize(config.TEST.DB, config.TEST.USER, config.TEST.PASSWORD, {
+  host: localhos,
   dialect: config.TEST.dialect,
   /*operatorsAliases: false,
   define: {
@@ -19,13 +19,21 @@ const sequelize = new Sequelize(config.TEST.DB, config.TEST.USER, config.TEST.PA
     idle: config.TEST.pool.idle,
   },
   retry: config.TEST.retry,
-  timezone: "+03:00",*/
+  timezone: "+03:00",
+});*/
+const sequelize = new Sequelize("Test", "postgres", "rabarba", {
+  host: "localhost",
+  dialect: "postgres",
 });
-
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+sequelize.sync({ force: true }).then(() => {
+  console.log('Veritabanı senkronizasyonu tamamlandı.');
+}).catch(err => {
+  console.error('Veritabanı senkronizasyonu sırasında hata oluştu:', err);
+}); 
 /*
  *   Defination of database models
  */

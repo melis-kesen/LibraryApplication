@@ -51,7 +51,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
 // database
-const db = require("./models");
+//const db = require("./models");
 //veritabanı tabloları yoksa otomatik modellerden oluşturulur. bu sadece guncellenmesini sağlıyor.
 //db.sequelize.sync({ alter: true, schema: 'SL'}); 
 

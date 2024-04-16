@@ -1,6 +1,11 @@
 const User = require('../models/users.model');
+const db = require("../models"); 
+const User = db.user;
+const Role = db.role; 
 const validateUser = require('../validators/users.validators');
-const getUsers = async (req, res) => {
+
+
+exports.getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
@@ -10,7 +15,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+exports.createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -19,7 +24,7 @@ const createUser = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-const borrowBook = async (req, res) => {
+exports.borrowBook = async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -28,7 +33,7 @@ const borrowBook = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-const returnBook = async (req, res) => {
+exports.returnBook = async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json(user);
@@ -38,9 +43,3 @@ const returnBook = async (req, res) => {
   }
 };
 
-module.exports = {
-  getUsers,
-  createUser,
-  borrowBook,
-  returnBook
-};

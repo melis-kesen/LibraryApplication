@@ -1,9 +1,8 @@
-const Sequelize = require("sequelize");
 const express = require('express');
 const app = express();
 const userRoutes = require('./routes/users.route');
 const bookRoutes = require('./routes/books.route');
-const sequelize = require('./config/database'); 
+//const sequelize = require('./config/database'); 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -16,28 +15,26 @@ dotenv.config({
   path: path.resolve(__dirname, `.env`)
 });
 
-const PORT = process.env.PORT || 8010;
+const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST || 'localhost';
-
-const app = express();
 
 // For forward client IP
 app.set('trust proxy', true);
 
 global.__basedir = __dirname;
 // Veritabanı bağlantısını test etmek için basit bir sorgu yapın
-sequelize
+/*sequelize
   .authenticate()
   .then(() => {
     console.log("Veritabanına başarıyla bağlanıldı.");
   })
   .catch((err) => {
     console.error("Veritabanı bağlantı hatası:", err);
-  });
+  });*/
 
 
 var corsOptions = { 
-  origin: [`http://smartline.tai.com.tr`,`http://${HOST}:${PORT}`, `http://${HOST}:3010`], // origin:"*",
+  origin: [`http://${HOST}:${PORT}`, `http://${HOST}:3010`], // origin:"*",
   credentials: true,
 };
 
@@ -54,9 +51,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
 // database
-const db = require("./app/models");
+const db = require("./models");
 //veritabanı tabloları yoksa otomatik modellerden oluşturulur. bu sadece guncellenmesini sağlıyor.
-db.sequelize.sync({ alter: true, schema: 'SL'}); 
+//db.sequelize.sync({ alter: true, schema: 'SL'}); 
 
 // routes
 // Kullanıcı rotalarını kullanmak için

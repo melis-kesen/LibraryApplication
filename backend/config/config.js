@@ -1,9 +1,9 @@
-const TEST = {
+module.exports.TEST = {
   HOST: process.env.DB_HOST,
-  USER: process.env.DB_USER,
+  USER: process.env.DB_USERNAME,
   PASSWORD: process.env.DB_PASSWORD,
-  DB: process.env.DB_DB,
-  dialect: "mssql",
+  DB: process.env.DB_DATABASE,
+  dialect: "postgres",
   pool: {
     max: 5,
     min: 0,
@@ -26,5 +26,4 @@ const TEST = {
     backoffExponent: 1.5, // Exponent to increase backoff each try. Default: 1.1
   },
 };
-
 

@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.TEST.DB, config.TEST.USER, config.TEST.PASSWORD, {
   host: config.TEST.HOST,
   dialect: config.TEST.dialect,
-  operatorsAliases: false,
+  /*operatorsAliases: false,
   define: {
     timestamps: false,
     // Tablo isimlerinin singular olması için eklenmişti. 
@@ -19,7 +19,7 @@ const sequelize = new Sequelize(config.TEST.DB, config.TEST.USER, config.TEST.PA
     idle: config.TEST.pool.idle,
   },
   retry: config.TEST.retry,
-  timezone: "+03:00",
+  timezone: "+03:00",*/
 });
 
 const db = {};
@@ -34,7 +34,7 @@ db.role = require("./books.model.js")(sequelize, Sequelize);
 
 // RELATIONS BETWEEN MODELS ----------------------------------------------------
 // user - role (many to many)
-db.user.belongsToMany(db.role, {
+/*db.user.belongsToMany(db.role, {
   through: "UserRole",
   foreignKey: "UserId",
   otherKey: "RoleId",
@@ -46,6 +46,6 @@ db.role.belongsToMany(db.user, {
   foreignKey: "RoleId",
   otherKey: "UserId",
   as: "Users",
-});
+});*/
 
 module.exports = db;

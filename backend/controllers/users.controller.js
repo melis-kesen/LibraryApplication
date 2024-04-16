@@ -1,7 +1,5 @@
-const User = require('../models/users.model');
 const db = require("../models"); 
 const User = db.user;
-const Role = db.role; 
 const validateUser = require('../validators/users.validators');
 
 

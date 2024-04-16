@@ -1,8 +1,23 @@
-const express = require('express');
-const router = express.Router();
-const BookController = require('../controllers/books.controller');
+const BookController = require("../controllers/books.controller");
 
-router.get('/books/:bookId', BookController.getBooks);
-router.post('/books', BookController.createBook);
+module.exports = function (app) {
+  app.use(function (req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Origin",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
 
-module.exports = router;
+  /**
+   * Get the book with given id
+   * @params id: id of the book
+   */
+  app.get("/books/:bookId", BookController.getBooks);
+
+  /**
+   * Add new book
+   */
+  app.post("/books", BookController.createBook);
+};

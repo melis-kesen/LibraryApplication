@@ -1,0 +1,7 @@
+NODE_ENV=develop
+HOST=localhost
+PORT=8080
+DB_HOST=postgres
+DB_USERNAME=postgres
+DB_PASSWORD=rabarba
+DB_DATABASE=Test

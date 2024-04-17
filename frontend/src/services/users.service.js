@@ -10,7 +10,7 @@ class UserService {
       })
       .then(
         (response) => {
-          return response;
+          return response.data;
         },
         (error) => {
           console.error("Error fetching users:", error);
@@ -25,7 +25,7 @@ class UserService {
       })
       .then(
         (response) => {
-          return response;
+          return response.data;
         },
         (error) => {
           console.error("Error fetching users:", error);
@@ -36,11 +36,9 @@ class UserService {
   createUser(user) {
     return axios
       .post(
-        API,
-        {
+        API, user,{
           withCredentials: true,
         },
-        user
       )
       .then(
         (response) => {
@@ -71,7 +69,7 @@ class UserService {
 
   returnBook(obj) {
     return axios
-      .post(API + "/" + obj.userId + "/score/" + obj.score, {
+      .post(API + "/" + obj.userId + "/return/" + obj.bookId, obj.score,{
         withCredentials: true,
       })
       .then(

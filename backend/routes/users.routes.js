@@ -15,7 +15,11 @@ module.exports = function (app) {
    * @params id: id of the user
    */
   app.get("/api/users", controller.getUsers);
-
+  /**
+   * Get the user with given id
+   * @params id: id of the user
+   */
+  app.get("/api/users/:userId", controller.getUser);
   /**
    * Add new user
    */
@@ -30,5 +34,5 @@ module.exports = function (app) {
   /**
    * Return book with given userId and score
    */
-  app.post("/api/users/:userId/return/:score", controller.returnBook);
+  app.post("/api/users/:userId/return/:bookId", controller.returnBook);
 };

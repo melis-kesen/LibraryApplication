@@ -10,7 +10,7 @@ class BookService  {
       })
       .then(
         (response) => {
-          return response;
+          return response.data;
         },
         (error) => {
           console.error("Error fetching users:", error);
@@ -35,9 +35,9 @@ class BookService  {
   }
   createBook(book) {
     return axios
-    .post(API, {
+    .post(API,book, {
       withCredentials: true,
-    }, book)
+    })
     .then(
       (response) => {
         return response;

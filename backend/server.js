@@ -1,7 +1,4 @@
 const express = require("express");
-const userRoutes = require("./routes/users.routes");
-const bookRoutes = require("./routes/books.routes");
-//const sequelize = require('./config/database');
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -51,7 +48,7 @@ app.use(express.static(path.join(__dirname, "build")));
 // database
 //const db = require("./models");
 //veritabanı tabloları yoksa otomatik modellerden oluşturulur. bu sadece guncellenmesini sağlıyor.
-//db.sequelize.sync({ alter: false, schema: 'SL'});
+//db.sequelize.sync({ alter: false });
 
 // routes
 // Kullanıcı rotalarını kullanmak için

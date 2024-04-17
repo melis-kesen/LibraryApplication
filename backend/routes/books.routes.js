@@ -16,6 +16,11 @@ module.exports = function (app) {
    */
   app.get("/api/books", controller.getBooks);
 
+    /**
+   * Get the book with given id
+   * @params id: id of the book
+   */
+    app.get("/api/books/:bookId", controller.getBook);
   /**
    * Add new book
    */

@@ -38,22 +38,22 @@ sequelize.sync({ force: true }).then(() => {
  *   Defination of database models
  */
 db.user = require("./users.model.js")(sequelize, Sequelize);
-db.role = require("./books.model.js")(sequelize, Sequelize);
+db.book = require("./books.model.js")(sequelize, Sequelize);
+db.userBook = require("./userBook.model.js")(sequelize, Sequelize);
 
 // RELATIONS BETWEEN MODELS ----------------------------------------------------
-// user - role (many to many)
-/*db.user.belongsToMany(db.role, {
-  through: "UserRole",
-  foreignKey: "UserId",
-  otherKey: "RoleId",
-  as: "Roles",
-});
-
-db.role.belongsToMany(db.user, {
-  through: "UserRole",
-  foreignKey: "RoleId",
-  otherKey: "UserId",
+// user - book (many to many)
+db.user.belongsToMany(db.book, {
+  through: "UserBook",
+  foreignKey: "userId",
+  otherKey: "bookId",
   as: "Users",
-});*/
+})
+db.book.belongsToMany(db.user, {
+  through: "UserBook",
+  foreignKey: "bookId",
+  otherKey: "userId",
+  as: "Books",
+})
 
 module.exports = db;

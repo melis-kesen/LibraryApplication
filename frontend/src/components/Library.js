@@ -12,34 +12,8 @@ import UserService from "../services/users.service";
 import BookService from "../services/books.service";
 
 export const Library = () => {
-  const [users, setUsers] = useState([
-    {
-      id: "1000",
-      code: "f230fh0g3",
-      name: "Bamboo Watch",
-      description: "Product Description",
-      image: "bamboo-watch.jpg",
-      price: 65,
-      category: "Accessories",
-      quantity: 24,
-      inventoryStatus: "INSTOCK",
-      rating: 5,
-    },
-  ]);
-  const [books, setBooks] = useState([
-    {
-      id: "1000",
-      code: "f230fh0g3",
-      name: "Bamboo Watch",
-      description: "Product Description",
-      image: "bamboo-watch.jpg",
-      price: 65,
-      category: "Accessories",
-      quantity: 24,
-      inventoryStatus: "INSTOCK",
-      rating: 5,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [books, setBooks] = useState([]);
   const [visibleRight, setVisibleRight] = useState(false);
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -61,7 +35,27 @@ export const Library = () => {
   const [sidebarType, setSidebarType]= useState("");
   useEffect(() => {
     UserService.getUsers().then(
-      async (response) => {},
+      async (response) => {
+        setUsers(response)
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+
+    BookService.getBooks().then(
+      async (response) => {
+        setBooks(response)
+      },
       (error) => {
         console.log(error.response);
         /*toast.current.show({
@@ -79,7 +73,7 @@ export const Library = () => {
 
   const createUser = ()=> {
     const obj = {
-      Name: username,
+      name: username,
     }
     UserService.createUser(obj).then(
       async (response) => {
@@ -101,7 +95,7 @@ export const Library = () => {
   }
   const createBook = ()=> {
     const obj = {
-      Name: bookname,
+      name: bookname,
     }
     BookService.createBook(obj).then(
       async (response) => {
@@ -141,7 +135,7 @@ export const Library = () => {
     );
   }
   const showBook = (rowData)=> {
-    BookService.getBook(bookId).then(
+    BookService.getBook(rowData.bookId).then(
       async (response) => {
         setVisibleRight(true);
       },
@@ -185,6 +179,7 @@ export const Library = () => {
   const returnBook = ()=> {
     const obj = {
       bookId: bookId,
+      userId: userId,
       score: score,
     }
     UserService.returnBook(obj).then(
@@ -221,7 +216,7 @@ export const Library = () => {
           rounded
           outlined
           className="mr-2"
-          onClick={showUser(rowData)}
+          onClick={() => showBook(rowData)}
           tooltip="Use for open details"
         />
         {/*<Button icon="pi pi-trash" rounded outlined severity="danger" />*/}
@@ -280,7 +275,7 @@ export const Library = () => {
         label="OK"
         rounded
         icon="pi pi-check"
-        onClick={dialogType === "Add User" ? createUser() : createBook()}
+        onClick={dialogType === "Add User" ? createUser : createBook}
         autoFocus
       />
     </div>
@@ -293,7 +288,7 @@ export const Library = () => {
       >
         <TabPanel header="Users" leftIcon="pi pi-user">
           <DataTable value={users} tableStyle={{ minWidth: "50rem" }}>
-            <Column field="id" header="ID"></Column>
+            <Column field="userId" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
               header="Details"
@@ -307,7 +302,7 @@ export const Library = () => {
         </TabPanel>
         <TabPanel header="Books" leftIcon="pi pi-book">
           <DataTable value={books} tableStyle={{ minWidth: "50rem" }}>
-            <Column field="id" header="ID"></Column>
+            <Column field="bookId" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
               header="Details"

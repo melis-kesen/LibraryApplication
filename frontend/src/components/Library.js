@@ -8,8 +8,8 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
-import { UserService } from "../services/Users.service";
-import { BookService } from "../services/Books.service";
+import UserService from "../services/Users.service";
+import BookService from "../services/Books.service";
 
 export const Library = () => {
   const [users, setUsers] = useState([
@@ -53,7 +53,21 @@ export const Library = () => {
     { name: "Paris", code: "PRS" },
   ];
   useEffect(() => {
-    //ProductService.getProductsMini().then(data => setProducts(data));
+    UserService.getUsers().then(
+      async (response) => {},
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
   }, []);
   const editProduct = (product) => {
     setVisibleRight(true);

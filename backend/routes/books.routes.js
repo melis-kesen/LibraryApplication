@@ -1,4 +1,4 @@
-const BookController = require("../controllers/books.controller");
+const controller = require("../controllers/books.controller");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -14,10 +14,10 @@ module.exports = function (app) {
    * Get the book with given id
    * @params id: id of the book
    */
-  app.get("/books/:bookId", BookController.getBooks);
+  app.get("/api/books", controller.getBooks);
 
   /**
    * Add new book
    */
-  app.post("/books", BookController.createBook);
+  app.post("/api/books", controller.createBook);
 };

@@ -8,8 +8,8 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
-import UserService from "../services/Users.service";
-import BookService from "../services/Books.service";
+import UserService from "../services/users.service";
+import BookService from "../services/books.service";
 
 export const Library = () => {
   const [users, setUsers] = useState([
@@ -52,6 +52,13 @@ export const Library = () => {
     { name: "Istanbul", code: "IST" },
     { name: "Paris", code: "PRS" },
   ];
+  const [value, setValue] = useState("");
+  const [username, setUsername] = useState("");
+  const [bookname, setBookname] = useState("");
+  const [userId, setUserId] = useState(null);
+  const [bookId, setBookId] = useState(null);
+  const [score, setScore] = useState(null);
+  const [sidebarType, setSidebarType]= useState("");
   useEffect(() => {
     UserService.getUsers().then(
       async (response) => {},
@@ -69,10 +76,158 @@ export const Library = () => {
       }
     );
   }, []);
-  const editProduct = (product) => {
+
+  const createUser = ()=> {
+    const obj = {
+      Name: username,
+    }
+    UserService.createUser(obj).then(
+      async (response) => {
+        setVisible(false);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const createBook = ()=> {
+    const obj = {
+      Name: bookname,
+    }
+    BookService.createBook(obj).then(
+      async (response) => {
+        setVisible(false);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const showUser = (rowData)=> {
+    UserService.getUser(userId).then(
+      async (response) => {
+        setVisibleRight(true);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const showBook = (rowData)=> {
+    BookService.getBook(bookId).then(
+      async (response) => {
+        setVisibleRight(true);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const borrowBook = ()=> {
+    const obj = {
+      userId: userId,
+      bookId: bookId,
+    }
+    UserService.borrowBook(obj).then(
+      async (response) => {
+        setVisible(false);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const returnBook = ()=> {
+    const obj = {
+      bookId: bookId,
+      score: score,
+    }
+    UserService.returnBook(obj).then(
+      async (response) => {
+        setVisible(false);
+      },
+      (error) => {
+        console.log(error.response);
+        /*toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+          life: 3000,
+        });*/
+      }
+    );
+  }
+  const openSidebar = (product) => {
+    setSidebarType(product);
     setVisibleRight(true);
   };
-
+  const openDialog = (type) => {
+    setDialogType(type);
+    setVisible(true);
+  };
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <React.Fragment>
+        <Button
+          icon="pi pi-info"
+          rounded
+          outlined
+          className="mr-2"
+          onClick={showUser(rowData)}
+          tooltip="Use for open details"
+        />
+        {/*<Button icon="pi pi-trash" rounded outlined severity="danger" />*/}
+      </React.Fragment>
+    );
+  };
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
       <Button
@@ -111,26 +266,6 @@ export const Library = () => {
       />
     </div>
   );
-  const openDialog = (type) => {
-    setDialogType(type);
-    setVisible(true);
-  };
-  const actionBodyTemplate = (rowData) => {
-    return (
-      <React.Fragment>
-        <Button
-          icon="pi pi-info"
-          rounded
-          outlined
-          className="mr-2"
-          onClick={() => editProduct(rowData)}
-          tooltip="Use for open details"
-        />
-        {/*<Button icon="pi pi-trash" rounded outlined severity="danger" />*/}
-      </React.Fragment>
-    );
-  };
-  const [value, setValue] = useState("");
   const footerContent = (
     <div>
       <Button
@@ -145,7 +280,7 @@ export const Library = () => {
         label="OK"
         rounded
         icon="pi pi-check"
-        onClick={() => setVisible(false)}
+        onClick={dialogType === "Add User" ? createUser() : createBook()}
         autoFocus
       />
     </div>
@@ -224,8 +359,8 @@ export const Library = () => {
             <FloatLabel>
               <InputText
                 id="username"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <label htmlFor="username">User Name</label>
             </FloatLabel>
@@ -236,8 +371,8 @@ export const Library = () => {
             <FloatLabel>
               <InputText
                 id="bookname"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
+                value={bookname}
+                onChange={(e) => setBookname(e.target.value)}
               />
               <label htmlFor="bookname">Book Name</label>
             </FloatLabel>

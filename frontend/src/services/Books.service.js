@@ -1,34 +1,53 @@
 import axios from "axios";
-const API = `http://localhost:8080/books`
+const configFile = require("../config/config");
+const API = configFile.port + "/api/books";
 
-const UserService = {
-  async getBooks() {
-    try {
-      const response = await axios.get(API);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching books:', error);
-      throw error;
-    }
-  },
-  async getBook(bookId) {
-    try {
-      const response = await axios.get(API + "/" + bookId);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching book:', error);
-      throw error;
-    }
-  },
-  async createBook() {
-    try {
-      const response = await axios.post(API);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating books:', error);
-      throw error;
-    }
-  },
+class BookService  {
+   getBooks() {
+    return axios
+      .get(API, {
+        withCredentials: true,
+      })
+      .then(
+        (response) => {
+          return response;
+        },
+        (error) => {
+          console.error("Error fetching users:", error);
+          throw error;
+        }
+      );
+  }
+   getBook(bookId) {
+    return axios
+    .get(API +"/" + bookId, {
+      withCredentials: true,
+    })
+    .then(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        console.error("Error fetching users:", error);
+        throw error;
+      }
+    );
+  }
+  createBook(book) {
+    return axios
+    .post(API, {
+      withCredentials: true,
+    }, book)
+    .then(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        console.error("Error fetching users:", error);
+        throw error;
+      }
+    );
+  }
 };
 
-export default UserService;
+export default new BookService();

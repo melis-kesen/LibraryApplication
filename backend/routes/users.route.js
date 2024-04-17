@@ -1,4 +1,4 @@
-const UserController = require("../controllers/users.controller");
+const controller = require("../controllers/users.controller");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -14,27 +14,21 @@ module.exports = function (app) {
    * Get the user with given id
    * @params id: id of the user
    */
-  app.get("/users/:userId", UserController.getUsers);
+  app.get("/api/users/:userId", controller.getUsers);
 
   /**
    * Add new user
    */
-  app.post("/users", UserController.createUser);
+  //app.post("/users", controller.createUser);
 
   /**
    * Borrow bookwith given userId and bookId
    */
-  app.post("/users/:userId/borrow/:bookId", UserController.borrowBook);
+  //app.post("/users/:userId/borrow/:bookId", controller.borrowBook);
 
   /** 
   /**
    * Return book with given userId and score
    */
-  app.post("/users/:userId/return/:score", UserController.returnBook);
-
-  /**
-   * Delete the user with given id
-   * @params id: id of the user
-   */
-  app.delete("/api/users/:id", controller.deleteUser);
+  //app.post("/users/:userId/return/:score", controller.returnBook);
 };

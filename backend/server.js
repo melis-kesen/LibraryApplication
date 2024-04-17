@@ -55,8 +55,8 @@ app.use(express.static(path.join(__dirname, "build")));
 
 // routes
 // Kullanıcı rotalarını kullanmak için
-require("./routes/users.route")(app);
-require("./routes/books.route")(app);
+require("./routes/users.routes")(app);
+require("./routes/books.routes")(app);
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on ${HOST}:${PORT}.`);

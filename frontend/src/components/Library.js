@@ -18,25 +18,24 @@ export const Library = () => {
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dialogType, setDialogType] = useState("");
-  const [selectedCity, setSelectedCity] = useState(null);
-  const cities = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
-  ];
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
   const [value, setValue] = useState("");
   const [username, setUsername] = useState("");
   const [bookname, setBookname] = useState("");
   const [userId, setUserId] = useState(null);
   const [bookId, setBookId] = useState(null);
   const [score, setScore] = useState(null);
-  const [sidebarType, setSidebarType]= useState("");
+  const [sidebarType, setSidebarType] = useState("");
+  const [isAdded, setIdAdded]= useState(false);
   useEffect(() => {
+    getUsers();
+    getBooks();
+  }, [isAdded]);
+  const getUsers = () => {
     UserService.getUsers().then(
       async (response) => {
-        setUsers(response)
+        setUsers(response);
       },
       (error) => {
         console.log(error.response);
@@ -51,33 +50,34 @@ export const Library = () => {
         });*/
       }
     );
-
+  };
+  const getBooks = () => {
     BookService.getBooks().then(
       async (response) => {
-        setBooks(response)
+        setBooks(response);
       },
       (error) => {
         console.log(error.response);
         /*toast.current.show({
-          severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
-          life: 3000,
-        });*/
+        severity: "error",
+        summary: "HATA",
+        detail:
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString(),
+        life: 3000,
+      });*/
       }
     );
-  }, []);
-
-  const createUser = ()=> {
+  };
+  const createUser = () => {
     const obj = {
       name: username,
-    }
+    };
     UserService.createUser(obj).then(
       async (response) => {
         setVisible(false);
+        setIdAdded(true)
       },
       (error) => {
         console.log(error.response);
@@ -92,14 +92,16 @@ export const Library = () => {
         });*/
       }
     );
-  }
-  const createBook = ()=> {
+    setIdAdded(false)
+  };
+  const createBook = () => {
     const obj = {
       name: bookname,
-    }
+    };
     BookService.createBook(obj).then(
       async (response) => {
         setVisible(false);
+        setIdAdded(true)
       },
       (error) => {
         console.log(error.response);
@@ -114,9 +116,10 @@ export const Library = () => {
         });*/
       }
     );
-  }
-  const showUser = (rowData)=> {
-    UserService.getUser(userId).then(
+    setIdAdded(false)
+  };
+  const showUser = (rowData) => {
+    UserService.getUser(rowData.userId).then(
       async (response) => {
         setVisibleRight(true);
       },
@@ -133,8 +136,8 @@ export const Library = () => {
         });*/
       }
     );
-  }
-  const showBook = (rowData)=> {
+  };
+  const showBook = (rowData) => {
     BookService.getBook(rowData.bookId).then(
       async (response) => {
         setVisibleRight(true);
@@ -152,12 +155,12 @@ export const Library = () => {
         });*/
       }
     );
-  }
-  const borrowBook = ()=> {
+  };
+  const borrowBook = () => {
     const obj = {
       userId: userId,
       bookId: bookId,
-    }
+    };
     UserService.borrowBook(obj).then(
       async (response) => {
         setVisible(false);
@@ -175,13 +178,13 @@ export const Library = () => {
         });*/
       }
     );
-  }
-  const returnBook = ()=> {
+  };
+  const returnBook = () => {
     const obj = {
       bookId: bookId,
       userId: userId,
       score: score,
-    }
+    };
     UserService.returnBook(obj).then(
       async (response) => {
         setVisible(false);
@@ -199,7 +202,7 @@ export const Library = () => {
         });*/
       }
     );
-  }
+  };
   const openSidebar = (product) => {
     setSidebarType(product);
     setVisibleRight(true);
@@ -216,7 +219,7 @@ export const Library = () => {
           rounded
           outlined
           className="mr-2"
-          onClick={() => showBook(rowData)}
+          onClick={rowData.userId ? () => showUser(rowData) :  () => showBook(rowData)}
           tooltip="Use for open details"
         />
         {/*<Button icon="pi pi-trash" rounded outlined severity="danger" />*/}
@@ -376,19 +379,19 @@ export const Library = () => {
         {dialogType === "Borrow Book" && (
           <div className="card flex flex-wrap justify-content-center">
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.value)}
+              options={users}
               optionLabel="name"
-              placeholder="Select a City"
+              placeholder="Select a User"
               className="w-full md:w-14rem"
             />
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedBook}
+              onChange={(e) => setSelectedBook(e.value)}
+              options={books}
               optionLabel="name"
-              placeholder="Select a City"
+              placeholder="Select a Book"
               className="w-full md:w-14rem"
             />
           </div>
@@ -396,19 +399,19 @@ export const Library = () => {
         {dialogType === "Return Book" && (
           <div className="card flex flex-wrap justify-content-center">
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.value)}
+              options={users}
               optionLabel="name"
-              placeholder="Select a City"
+              placeholder="Select a User"
               className="w-full md:w-14rem"
             />
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedBook}
+              onChange={(e) => setSelectedBook(e.value)}
+              options={books}
               optionLabel="name"
-              placeholder="Select a City"
+              placeholder="Select a Book"
               className="w-full md:w-14rem"
             />
           </div>

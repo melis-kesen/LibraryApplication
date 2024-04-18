@@ -51,9 +51,13 @@ npm run start
 ## Docker
 
 ```bash
-docker-compose up --build
+cd /path/to/backend
+docker build -t backend-image .
 ```
-
+```bash
+cd /path/to/frontend
+docker build -t frontend-image .
+```
 ## Usage
 
 ```text

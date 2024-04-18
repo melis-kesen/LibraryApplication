@@ -13,6 +13,15 @@ An application has been developed to manage members and the borrowing of books b
 - Returning a book and giving a rating
 
 ## Application
+
+- Developed with the REST API Express.js library.
+- JavaScript has been utilized.
+- PostgreSQL has been chosen as the database.
+- Sequelize has been used as an ORM for database operations.
+- Body payloads in API requests have been validated using the Joi validator.
+- In case of errors (such as attempting to borrow a book for a non-existent user, attempting to borrow a book already borrowed by someone else, etc.), the application catches the error and indicates an error in the API response (at least 500 Internal Server Error).
+
+#### Frontend development has been done for visualization purposes, utilizing React Hooks.
 ![](./gif1.gif)
 
 ## Installation

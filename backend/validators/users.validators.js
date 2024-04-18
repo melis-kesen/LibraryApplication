@@ -16,8 +16,6 @@ const returnBookSchemaParams = Joi.object({
   bookId: Joi.number().integer().positive().required(),
 });
 const returnBookSchemaBody = Joi.object({
-  userId: Joi.number().integer().positive().required(),
-  bookId: Joi.number().integer().positive().required(),
   score: Joi.number().integer().min(0).max(100).required(),
 });
 module.exports = {

@@ -226,12 +226,12 @@ export const Library = () => {
         life: 3000,
       });
     } else {
+      const userId = selectedUser.id;
+      const bookId = selectedBook.id;
       const obj = {
-        userId: selectedUser.id,
-        bookId: selectedBook.id,
         score: score,
       };
-      UserService.returnBook(obj).then(
+      UserService.returnBook(userId, bookId, obj).then(
         async (response) => {
           setVisible(false);
           setSelectedBook("");

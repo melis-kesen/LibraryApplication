@@ -63,37 +63,13 @@ To run the application, execute the following command:
 
 docker-compose up --build
 
-Upon completion of the build, navigate to localhost:3000 in your web browser. As there are no products in the database initially, you won't see any data displayed.
+Upon completion of the build, navigate to localhost:3000 in your web browser. As there are no users and books in the database initially, you won't see any data displayed.
+User, Book and UserBook tables are automatically populated upon completion of the build
+Clicking the add user or add book buttons will open a dialog where you can input the details:
 
-Clicking the Generate button will open a dialog where you can input the product details:
-
-- Example:
-  - Product Name: Product 1
-  - Price: (Accepted as an integer value)
-  - SKU: SKU123 (Accepted as a unique value)
-  - Stock Level: 50
-
-Clicking the Submit button will save the product.
-
-For visual appeal, 12 default product images have been included within the project.
+Clicking the Ok button will save the user/book.
 
 ### Possible Errors ###
-
-If the Product table is not automatically populated upon completion of the build, follow these steps:
-
-1. Access the pgAdmin panel at localhost:5050.
-   - Email: admin@admin.com
-   - Password: pgadmin4
-
-2. Right-click on the Server and select Register > Server.
-   - General:
-     - Name: Test
-   - Connection:
-     - Host: db
-     - Port: 5432
-     - Database: postgres
-     - Password: postgres
-
 
 ```
 

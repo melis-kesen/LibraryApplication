@@ -1,6 +1,6 @@
 import axios from "axios";
 const configFile = require("../config/config");
-const API = configFile.port + "/api/books";
+const API = configFile.port + "/books";
 
 class BookService  {
    getBooks() {

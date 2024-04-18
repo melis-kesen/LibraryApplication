@@ -14,25 +14,25 @@ module.exports = function (app) {
    * Get the user with given id
    * @params id: id of the user
    */
-  app.get("/api/users", controller.getUsers);
+  app.get("/users", controller.getUsers);
   /**
    * Get the user with given id
    * @params id: id of the user
    */
-  app.get("/api/users/:userId", controller.getUser);
+  app.get("/users/:userId", controller.getUser);
   /**
    * Add new user
    */
-  app.post("/api/users", controller.createUser);
+  app.post("/users", controller.createUser);
 
   /**
    * Borrow bookwith given userId and bookId
    */
-  app.post("/api/users/:userId/borrow/:bookId", controller.borrowBook);
+  app.post("/users/:userId/borrow/:bookId", controller.borrowBook);
 
   /** 
   /**
    * Return book with given userId and score
    */
-  app.post("/api/users/:userId/return/:bookId", controller.returnBook);
+  app.post("/users/:userId/return/:bookId", controller.returnBook);
 };

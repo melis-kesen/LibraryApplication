@@ -14,15 +14,15 @@ module.exports = function (app) {
    * Get the book with given id
    * @params id: id of the book
    */
-  app.get("/api/books", controller.getBooks);
+  app.get("/books", controller.getBooks);
 
     /**
    * Get the book with given id
    * @params id: id of the book
    */
-    app.get("/api/books/:bookId", controller.getBook);
+    app.get("/books/:bookId", controller.getBook);
   /**
    * Add new book
    */
-  app.post("/api/books", controller.createBook);
+  app.post("/books", controller.createBook);
 };

@@ -28,6 +28,8 @@ An application has been developed to manage members and the borrowing of books b
 
 Use the package manager [npm](https://www.npmjs.com) to install node modules.
 
+You need to add .env file to backend folder with your database configuration. An example env file is added.
+
 ```bash
 cd Frontend
 npm install 

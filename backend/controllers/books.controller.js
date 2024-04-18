@@ -1,6 +1,6 @@
 const db = require("../models");
 const Book = db.book;
-const validateBook = require("../validators/books.validators");
+const  {getBookSchema, createBookSchema } = require("../validators/books.validators");
 /**
  * Get all books
  */
@@ -25,6 +25,12 @@ exports.getBooks = async (req, res) => {
  */
 exports.getBook = async (req, res) => {
   try {
+    const { error, value } = getBookSchema.validate(req.params);
+
+    // Eğer hata varsa, istemciye hatayı döndür
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const bookId = req.params.bookId;
     const book = await Book.findOne({
       where: { bookId: bookId },
@@ -46,6 +52,12 @@ exports.getBook = async (req, res) => {
  */
 exports.createBook = async (req, res) => {
   try {
+    const { error, value } = createBookSchema.validate(req.body);
+
+    // Eğer hata varsa, istemciye hatayı döndür
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const bookname = req.body.name;
     const [book, created] = await Book.findOrCreate({
       where: { name: bookname },

@@ -2,7 +2,7 @@ const db = require("../models");
 const User = db.user;
 const Book = db.book;
 const UserBook = db.userBook;
-const validateUser = require("../validators/users.validators");
+const {getUserSchema, createUserSchema, borrowBookSchema ,returnBookSchemaParams, returnBookSchemaBody} = require("../validators/users.validators");
 /**
  * Get all users
  */
@@ -26,6 +26,11 @@ exports.getUsers = async (req, res) => {
  */
 exports.getUser = async (req, res) => {
   try {
+    const { error, value } = getUserSchema.validate(req.params);
+
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const userId = req.params.userId;
 
     const userBooks = await UserBook.findAll({
@@ -91,6 +96,11 @@ exports.getUser = async (req, res) => {
  */
 exports.createUser = async (req, res) => {
   try {
+    const { error, value } = createUserSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const username = req.body.name;
     const [user, created] = await User.findOrCreate({
       where: { name: username },
@@ -110,6 +120,11 @@ exports.createUser = async (req, res) => {
  */
 exports.borrowBook = async (req, res) => {
   try {
+    const { error, value } = borrowBookSchema.validate(req.params);
+
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const userId = req.params.userId;
     const bookId = req.params.bookId;
 
@@ -148,6 +163,16 @@ exports.borrowBook = async (req, res) => {
    */
 exports.returnBook = async (req, res) => {
   try {
+    const { error: paramsError, value: paramsValue } = returnBookSchemaParams.validate(req.params);
+    const { error: bodyError, value: bodyValue } = returnBookSchemaBody.validate(req.body);
+    
+    if (paramsError) {
+      return res.status(400).json({ message: paramsError.details[0].message });
+    }
+    
+    if (bodyError) {
+      return res.status(400).json({ message: bodyError.details[0].message });
+    }
     const userId = req.params.userId;
     const bookId = req.params.bookId;
     const score = req.body.score;

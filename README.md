@@ -1,6 +1,16 @@
 # Library Application
 
-Application that includes a backend server, a frontend interface, and utilizes a PostgreSQL database. The application will manage a catalog of mock products, allowing users to sort, pin, and view these products.
+
+An application has been developed to manage members and the borrowing of books by members for a library. The operations that the application can perform are listed below:
+
+- Listing users
+- Accessing information about a user (their name, books borrowed in the past, and currently borrowed books)
+- Creating a new user
+- Listing books
+- Accessing information about a book (its name and average rating)
+- Creating a new book
+- Borrowing a book
+- Returning a book and giving a rating
 
 ## Application
 ![](./gif1.gif)

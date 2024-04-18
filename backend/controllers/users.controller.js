@@ -3,7 +3,9 @@ const User = db.user;
 const Book = db.book;
 const UserBook = db.userBook;
 const validateUser = require("../validators/users.validators");
-
+/**
+ * Get all users
+ */
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.findAll({
@@ -18,7 +20,10 @@ exports.getUsers = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
+/**
+ * Get the user with given id
+ * @params id: id of the user
+ */
 exports.getUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -81,6 +86,9 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+/**
+ * Add new user
+ */
 exports.createUser = async (req, res) => {
   try {
     const username = req.body.name;
@@ -97,7 +105,9 @@ exports.createUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
+/**
+ * Borrow book with given userId and bookId
+ */
 exports.borrowBook = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -132,6 +142,10 @@ exports.borrowBook = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+/** 
+  /**
+   * Return book with given userId and bookId
+   */
 exports.returnBook = async (req, res) => {
   try {
     const userId = req.params.userId;

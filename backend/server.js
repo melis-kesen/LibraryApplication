@@ -18,15 +18,6 @@ const app = express();
 app.set("trust proxy", true);
 
 global.__basedir = __dirname;
-// Veritabanı bağlantısını test etmek için basit bir sorgu yapın
-/*sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Veritabanına başarıyla bağlanıldı.");
-  })
-  .catch((err) => {
-    console.error("Veritabanı bağlantı hatası:", err);
-  });*/
 
 var corsOptions = {
   origin: [`http://${HOST}:${PORT}`, `http://${HOST}:3000`],
@@ -51,7 +42,6 @@ app.use(express.static(path.join(__dirname, "build")));
 //db.sequelize.sync({ alter: false });
 
 // routes
-// Kullanıcı rotalarını kullanmak için
 require("./routes/users.routes")(app);
 require("./routes/books.routes")(app);
 

@@ -9,7 +9,6 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
-import { ListBox } from "primereact/listbox";
 import { Toast } from "primereact/toast";
 
 import UserService from "../services/users.service";
@@ -170,7 +169,12 @@ export const Library = () => {
     );
   };
   const borrowBook = () => {
-    if (selectedUser === null || selectedUser?.id === null || selectedBook === null || selectedBook?.id === null) {
+    if (
+      selectedUser === null ||
+      selectedUser?.id === null ||
+      selectedBook === null ||
+      selectedBook?.id === null
+    ) {
       toast.current.show({
         severity: "warn",
         summary: "WARNING",
@@ -208,10 +212,11 @@ export const Library = () => {
     }
   };
   const returnBook = () => {
-    if (selectedUser === null ||
+    if (
+      selectedUser === null ||
       selectedUser?.id === null ||
       selectedBook?.id === null ||
-      selectedBook === null||
+      selectedBook === null ||
       score === null
     ) {
       toast.current.show({
@@ -393,19 +398,17 @@ export const Library = () => {
               <p>
                 <b>Present Books:</b>
               </p>
-                 <DataTable value={presentBook} tableStyle={{ minWidth: "10rem" }}>
+              <DataTable value={presentBook} tableStyle={{ minWidth: "10rem" }}>
                 <Column field="name" header="Name"></Column>
                 <Column field="userScore" header="Score"></Column>
-
-          </DataTable>
+              </DataTable>
               <p>
                 <b>Past Books:</b>
               </p>
               <DataTable value={pastBook} tableStyle={{ minWidth: "10rem" }}>
                 <Column field="name" header="Name"></Column>
                 <Column field="userScore" header="Score"></Column>
-
-          </DataTable>
+              </DataTable>
             </div>
           </div>
         )}

@@ -35,11 +35,9 @@ class UserService {
   }
   createUser(user) {
     return axios
-      .post(
-        API, user,{
-          withCredentials: true,
-        },
-      )
+      .post(API, user, {
+        withCredentials: true,
+      })
       .then(
         (response) => {
           return response.data;
@@ -69,7 +67,7 @@ class UserService {
 
   returnBook(obj) {
     return axios
-      .post(API + "/" + obj.userId + "/return/" + obj.bookId, obj,{
+      .post(API + "/" + obj.userId + "/return/" + obj.bookId, obj, {
         withCredentials: true,
       })
       .then(

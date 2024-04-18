@@ -11,12 +11,11 @@ module.exports = function (app) {
   });
 
   /**
-   * Get the book with given id
-   * @params id: id of the book
+   * Get all books
    */
   app.get("/books", controller.getBooks);
 
-    /**
+  /**
    * Get the book with given id
    * @params id: id of the book
    */

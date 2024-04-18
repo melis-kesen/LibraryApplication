@@ -6,13 +6,13 @@ const validateUser = require("../validators/users.validators");
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.findAll({ 
-      attributes: [['userId', 'id'], 'name'] 
-    }); // Tek bir kullanıcıyı almak için findByPk kullanılır
+    const users = await User.findAll({
+      attributes: [["userId", "id"], "name"],
+    });
     if (!users) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(users); // Kullanıcıyı JSON formatında yanıt olarak gönder
+    res.status(200).json(users);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -22,67 +22,64 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-  
-    // Kullanıcının ödünç aldığı kitapları getir
+
     const userBooks = await UserBook.findAll({
       where: { userId },
       include: [
         {
           model: Book,
-          attributes: ['bookId', 'name', 'score'] // Kitapların detaylarını al
-        }
-      ]
+          attributes: ["bookId", "name", "score"],
+        },
+      ],
     });
-  
+
     if (userBooks.length > 0) {
       const presentBooks = [];
       const pastBooks = [];
-  
-      userBooks.forEach(userBook => {
+
+      userBooks.forEach((userBook) => {
         const book = userBook.Book;
         const bookDetail = {
           bookId: book.bookId,
           name: book.name,
-          userScore: userBook.userScore
+          userScore: userBook.userScore,
         };
-  
+
         if (userBook.present) {
           presentBooks.push(bookDetail);
         } else if (userBook.past) {
           pastBooks.push(bookDetail);
         }
       });
-  
+
       const user = await User.findOne({ where: { userId } });
       const userJson = {
         id: userId,
         name: user.name,
         books: {
           past: pastBooks,
-          present: presentBooks
-        }
+          present: presentBooks,
+        },
       };
-  
+
       res.status(200).json(userJson);
     } else {
-      // Kullanıcının ödünç aldığı kitap yok
       const user = await User.findOne({ where: { userId } });
       const userJson = {
         id: userId,
         name: user.name,
         books: {
           past: [],
-          present: []
-        }
+          present: [],
+        },
       };
-      
+
       res.status(200).json(userJson);
     }
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
-  
 };
 exports.createUser = async (req, res) => {
   try {
@@ -105,27 +102,26 @@ exports.borrowBook = async (req, res) => {
   try {
     const userId = req.params.userId;
     const bookId = req.params.bookId;
-  
-    // Belirli bir kullanıcının belirli bir kitabı ödünç aldığını kontrol et
+
     const existingUserBook = await UserBook.findOne({
       where: {
         userId: userId,
         bookId: bookId,
-        past: false, // Eğer kitap zaten iade edilmişse bu kontrolü yapmak istemeyebilirsiniz
-        present: true // Eğer kitap zaten başka bir kullanıcıda ise bu kontrolü yapmak istemeyebilirsiniz
-      }
+        past: false,
+        present: true,
+      },
     });
-  
+
     if (existingUserBook) {
-      // Kullanıcı zaten belirli bir kitabı ödünç almış
-      return res.status(400).json({ message: "User already borrowed this book" });
+      return res
+        .status(400)
+        .json({ message: "User already borrowed this book" });
     }
-  
-    // Kullanıcı daha önce bu kitabı ödünç almamış, yeni bir kayıt oluştur
+
     const [userBook, created] = await UserBook.findOrCreate({
       where: { userId: userId, bookId: bookId, past: false, present: true },
     });
-  
+
     if (created) {
       res.status(200).json({ message: "User borrowed a book successfully" });
     } else {
@@ -135,15 +131,13 @@ exports.borrowBook = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Internal Server Error" });
   }
-  
 };
 exports.returnBook = async (req, res) => {
   try {
     const userId = req.params.userId;
     const bookId = req.params.bookId;
     const score = req.body.score;
-  
-    // UserBook tablosunda ilgili kaydı güncelle
+
     const updated = await UserBook.update(
       { past: true, present: false, userScore: score },
       {
@@ -154,29 +148,27 @@ exports.returnBook = async (req, res) => {
       }
     );
     if (updated[0]) {
-    // Kitaba ait ortalama puanı hesapla ve güncelle
-    const bookScore = await UserBook.findAll({
-      where: { bookId: bookId,  past: true, present: false } // Kitabı iade edilen tüm kayıtları getir
-    });
-  
-    let sum = 0;
-    bookScore.forEach(item => {
-      sum += item.userScore; // Tüm puanları topla
-    });
-    const avgScore = sum / bookScore.length; // Ortalama puanı hesapla
-  
-    const updatedBook = await Book.update(
-      { score: avgScore },
-      {
-        where: {
-          bookId: bookId,
-        },
-      }
-    );
+      const bookScore = await UserBook.findAll({
+        where: { bookId: bookId, past: true, present: false },
+      });
+
+      let sum = 0;
+      bookScore.forEach((item) => {
+        sum += item.userScore;
+      });
+      const avgScore = sum / bookScore.length;
+
+      const updatedBook = await Book.update(
+        { score: avgScore },
+        {
+          where: {
+            bookId: bookId,
+          },
+        }
+      );
 
       res.status(200).json({ score: score });
-    }
-    else {
+    } else {
       res.status(400).json({ message: "There is no book to return!" });
     }
   } catch (err) {

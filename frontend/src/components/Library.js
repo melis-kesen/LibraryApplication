@@ -9,7 +9,7 @@ import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
-
+import { ListBox } from "primereact/listbox";
 import { Toast } from "primereact/toast";
 
 import UserService from "../services/users.service";
@@ -25,16 +25,15 @@ export const Library = () => {
   const [dialogType, setDialogType] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [value, setValue] = useState("");
   const [username, setUsername] = useState("");
   const [bookname, setBookname] = useState("");
-  const [userId, setUserId] = useState(null);
-  const [bookId, setBookId] = useState(null);
   const [score, setScore] = useState(null);
-  const [sidebarType, setSidebarType] = useState("");
   const [isAdded, setIdAdded] = useState(false);
   const [presentBook, setPresentBook] = useState([]);
   const [pastBook, setPastBook] = useState([]);
+  const [avgScore, setAvgScore] = useState(null);
+  const [bookSidebarHeader, setBookSidebarHeader] = useState("");
+  const [userSidebarHeader, setUserSidebarHeader] = useState("");
   useEffect(() => {
     getUsers();
     getBooks();
@@ -87,6 +86,7 @@ export const Library = () => {
         async (response) => {
           setVisible(false);
           setIdAdded(true);
+          setUsername("");
         },
         (error) => {
           console.log(error.response);
@@ -117,6 +117,7 @@ export const Library = () => {
         async (response) => {
           setVisible(false);
           setIdAdded(true);
+          setBookname("");
         },
         (error) => {
           console.log(error.response);
@@ -137,6 +138,7 @@ export const Library = () => {
         setPresentBook(response.books.present);
         setPastBook(response.books.past);
         setVisibleRight(true);
+        setUserSidebarHeader(rowData.name);
       },
       (error) => {
         console.log(error.response);
@@ -153,6 +155,8 @@ export const Library = () => {
     BookService.getBook(rowData.bookId).then(
       async (response) => {
         setVisibleRight(true);
+        setAvgScore(response.score);
+        setBookSidebarHeader(rowData.name);
       },
       (error) => {
         console.log(error.response);
@@ -181,6 +185,9 @@ export const Library = () => {
       UserService.borrowBook(obj).then(
         async (response) => {
           setVisible(false);
+          setSelectedBook("");
+          setSelectedUser("");
+          setScore(null);
         },
         (error) => {
           console.log(error.response);
@@ -215,6 +222,9 @@ export const Library = () => {
       UserService.returnBook(obj).then(
         async (response) => {
           setVisible(false);
+          setSelectedBook("");
+          setSelectedUser("");
+          setScore(null);
         },
         (error) => {
           console.log(error.response);
@@ -226,10 +236,6 @@ export const Library = () => {
         }
       );
     }
-  };
-  const openSidebar = (product) => {
-    setSidebarType(product);
-    setVisibleRight(true);
   };
   const openDialog = (type) => {
     setDialogType(type);
@@ -262,6 +268,14 @@ export const Library = () => {
     } else {
       returnBook();
     }
+  };
+  const clickCancel = () => {
+    setVisible(false);
+    setUsername("");
+    setBookname("");
+    setSelectedBook("");
+    setSelectedUser("");
+    setScore(null);
   };
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -308,7 +322,7 @@ export const Library = () => {
         rounded
         severity="danger"
         icon="pi pi-times"
-        onClick={() => setVisible(false)}
+        onClick={() => clickCancel()}
         className="p-button-text"
       />
       <Button
@@ -365,21 +379,36 @@ export const Library = () => {
       >
         {activeIndex === 0 && (
           <div>
-            <h2>Bamboo Watch</h2>
-            <DataTable value={users}>
-              <Column field="past" header="Past Books"></Column>
-            </DataTable>
-            <DataTable value={users}>
-              <Column field="present" header="Present Books"></Column>
-            </DataTable>
+            <h2 style={{ textAlign: "center" }}>{userSidebarHeader}</h2>
+            <div className="card flex justify-content-center">
+              <p>
+                <b>Past Books:</b>
+              </p>
+              <ListBox
+                options={pastBook}
+                optionLabel="name"
+                className="w-full md:w-14rem"
+              />
+              <p>
+                <b>Present Books:</b>
+              </p>
+              <ListBox
+                options={presentBook}
+                optionLabel="name"
+                className="w-full md:w-14rem"
+              />
+            </div>
           </div>
         )}
         {activeIndex === 1 && (
           <div>
-            <h2>Bamboo Watch</h2>
-            <DataTable value={books}>
-              <Column field="score" header="Average Score"></Column>
-            </DataTable>
+            <h2 style={{ textAlign: "center" }}>{bookSidebarHeader}</h2>
+            <div className="card flex justify-content-center">
+              <p>
+                <b>Average Score: </b>
+                {avgScore}
+              </p>
+            </div>
           </div>
         )}
       </Sidebar>
@@ -387,7 +416,6 @@ export const Library = () => {
       <Dialog
         header={dialogType}
         visible={visible}
-        //style={{ width: "25vw" }}
         onHide={() => setVisible(false)}
         footer={footerContent}
       >

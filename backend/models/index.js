@@ -43,6 +43,11 @@ db.userBook = require("./userBook.model.js")(sequelize, Sequelize);
 
 // RELATIONS BETWEEN MODELS ----------------------------------------------------
 // user - book (many to many)
+db.user.hasMany(db.userBook , { foreignKey: 'userId' });
+db.userBook .belongsTo(db.user, { foreignKey: 'userId' });
+
+db.userBook.belongsTo(db.book, { foreignKey: 'bookId' });
+db.book.hasMany(db.userBook , { foreignKey: 'bookId' });
 db.user.belongsToMany(db.book, {
   through: "UserBook",
   foreignKey: "userId",

@@ -25,7 +25,7 @@ class BookService  {
     })
     .then(
       (response) => {
-        return response;
+        return response.data;
       },
       (error) => {
         console.error("Error fetching users:", error);

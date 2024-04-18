@@ -18,7 +18,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         present:{
           type: Sequelize.BOOLEAN,
-        }
+        },
+        userScore: {
+          type: Sequelize.INTEGER,
+        },
       },
       {
         tableName: "UserBook",

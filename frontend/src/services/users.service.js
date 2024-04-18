@@ -69,7 +69,7 @@ class UserService {
 
   returnBook(obj) {
     return axios
-      .post(API + "/" + obj.userId + "/return/" + obj.bookId, obj.score,{
+      .post(API + "/" + obj.userId + "/return/" + obj.bookId, obj,{
         withCredentials: true,
       })
       .then(

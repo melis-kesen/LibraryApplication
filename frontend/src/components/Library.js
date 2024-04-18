@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
@@ -8,10 +8,15 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { Dropdown } from "primereact/dropdown";
+import { InputNumber } from "primereact/inputnumber";
+
+import { Toast } from "primereact/toast";
+
 import UserService from "../services/users.service";
 import BookService from "../services/books.service";
 
 export const Library = () => {
+  const toast = useRef(null);
   const [users, setUsers] = useState([]);
   const [books, setBooks] = useState([]);
   const [visibleRight, setVisibleRight] = useState(false);
@@ -27,7 +32,9 @@ export const Library = () => {
   const [bookId, setBookId] = useState(null);
   const [score, setScore] = useState(null);
   const [sidebarType, setSidebarType] = useState("");
-  const [isAdded, setIdAdded]= useState(false);
+  const [isAdded, setIdAdded] = useState(false);
+  const [presentBook, setPresentBook] = useState([]);
+  const [pastBook, setPastBook] = useState([]);
   useEffect(() => {
     getUsers();
     getBooks();
@@ -39,15 +46,12 @@ export const Library = () => {
       },
       (error) => {
         console.log(error.response);
-        /*toast.current.show({
+        toast.current.show({
           severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
+          summary: "ERROR",
+          detail: error.response.data.message,
           life: 3000,
-        });*/
+        });
       }
     );
   };
@@ -58,82 +62,90 @@ export const Library = () => {
       },
       (error) => {
         console.log(error.response);
-        /*toast.current.show({
-        severity: "error",
-        summary: "HATA",
-        detail:
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString(),
-        life: 3000,
-      });*/
+        toast.current.show({
+          severity: "error",
+          summary: "HATA",
+          detail: error.response.data.message,
+          life: 3000,
+        });
       }
     );
   };
   const createUser = () => {
-    const obj = {
-      name: username,
-    };
-    UserService.createUser(obj).then(
-      async (response) => {
-        setVisible(false);
-        setIdAdded(true)
-      },
-      (error) => {
-        console.log(error.response);
-        /*toast.current.show({
-          severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
-          life: 3000,
-        });*/
-      }
-    );
-    setIdAdded(false)
+    if (username === "") {
+      toast.current.show({
+        severity: "warn",
+        summary: "WARNING",
+        detail: "User Name is required!",
+        life: 3000,
+      });
+    } else {
+      const obj = {
+        name: username,
+      };
+      UserService.createUser(obj).then(
+        async (response) => {
+          setVisible(false);
+          setIdAdded(true);
+        },
+        (error) => {
+          console.log(error.response);
+          toast.current.show({
+            severity: "error",
+            summary: "ERROR",
+            detail: error.response.data.message,
+            life: 3000,
+          });
+        }
+      );
+      setIdAdded(false);
+    }
   };
   const createBook = () => {
-    const obj = {
-      name: bookname,
-    };
-    BookService.createBook(obj).then(
-      async (response) => {
-        setVisible(false);
-        setIdAdded(true)
-      },
-      (error) => {
-        console.log(error.response);
-        /*toast.current.show({
-          severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
-          life: 3000,
-        });*/
-      }
-    );
-    setIdAdded(false)
+    if (bookname === "") {
+      toast.current.show({
+        severity: "warn",
+        summary: "WARNING",
+        detail: "Book Name is required!",
+        life: 3000,
+      });
+    } else {
+      const obj = {
+        name: bookname,
+      };
+      BookService.createBook(obj).then(
+        async (response) => {
+          setVisible(false);
+          setIdAdded(true);
+        },
+        (error) => {
+          console.log(error.response);
+          toast.current.show({
+            severity: "error",
+            summary: "HATA",
+            detail: error.response.data.message,
+            life: 3000,
+          });
+        }
+      );
+      setIdAdded(false);
+    }
   };
   const showUser = (rowData) => {
     UserService.getUser(rowData.userId).then(
       async (response) => {
+        setPresentBook(response.books.present);
+        setPastBook(response.books.past);
         setVisibleRight(true);
       },
       (error) => {
         console.log(error.response);
-        /*toast.current.show({
+        toast.current.show({
           severity: "error",
           summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
+          detail: error.response.data.message,
           life: 3000,
-        });*/
+        });
       }
     );
   };
@@ -144,64 +156,76 @@ export const Library = () => {
       },
       (error) => {
         console.log(error.response);
-        /*toast.current.show({
+        toast.current.show({
           severity: "error",
           summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
+          detail: error.response.data.message,
           life: 3000,
-        });*/
+        });
       }
     );
   };
   const borrowBook = () => {
-    const obj = {
-      userId: userId,
-      bookId: bookId,
-    };
-    UserService.borrowBook(obj).then(
-      async (response) => {
-        setVisible(false);
-      },
-      (error) => {
-        console.log(error.response);
-        /*toast.current.show({
-          severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
-          life: 3000,
-        });*/
-      }
-    );
+    if (selectedUser.userId === null || selectedBook.bookId === null) {
+      toast.current.show({
+        severity: "warn",
+        summary: "WARNING",
+        detail: "User Name and Book Name is required!",
+        life: 3000,
+      });
+    } else {
+      const obj = {
+        userId: selectedUser.userId,
+        bookId: selectedBook.bookId,
+      };
+      UserService.borrowBook(obj).then(
+        async (response) => {
+          setVisible(false);
+        },
+        (error) => {
+          console.log(error.response);
+          toast.current.show({
+            severity: "error",
+            summary: "HATA",
+            detail: error.response.data.message,
+            life: 3000,
+          });
+        }
+      );
+    }
   };
   const returnBook = () => {
-    const obj = {
-      bookId: bookId,
-      userId: userId,
-      score: score,
-    };
-    UserService.returnBook(obj).then(
-      async (response) => {
-        setVisible(false);
-      },
-      (error) => {
-        console.log(error.response);
-        /*toast.current.show({
-          severity: "error",
-          summary: "HATA",
-          detail:
-            (error.response && error.response.data) ||
-            error.message ||
-            error.toString(),
-          life: 3000,
-        });*/
-      }
-    );
+    if (
+      selectedUser.userId === null ||
+      selectedBook.bookId === null ||
+      score === null
+    ) {
+      toast.current.show({
+        severity: "warn",
+        summary: "WARNING",
+        detail: "User Name, Book Name and Score is required!",
+        life: 3000,
+      });
+    } else {
+      const obj = {
+        bookId: selectedUser.userId,
+        userId: selectedBook.bookId,
+        score: score,
+      };
+      UserService.returnBook(obj).then(
+        async (response) => {
+          setVisible(false);
+        },
+        (error) => {
+          console.log(error.response);
+          toast.current.show({
+            severity: "error",
+            detail: error.response.data.message,
+            life: 3000,
+          });
+        }
+      );
+    }
   };
   const openSidebar = (product) => {
     setSidebarType(product);
@@ -219,12 +243,25 @@ export const Library = () => {
           rounded
           outlined
           className="mr-2"
-          onClick={rowData.userId ? () => showUser(rowData) :  () => showBook(rowData)}
+          onClick={
+            rowData.userId ? () => showUser(rowData) : () => showBook(rowData)
+          }
           tooltip="Use for open details"
         />
         {/*<Button icon="pi pi-trash" rounded outlined severity="danger" />*/}
       </React.Fragment>
     );
+  };
+  const selectDialog = (dialogType) => {
+    if (dialogType === "Add User") {
+      createUser();
+    } else if (dialogType === "Add Book") {
+      createBook();
+    } else if (dialogType === "Borrow Book") {
+      borrowBook();
+    } else {
+      returnBook();
+    }
   };
   const header = (
     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
@@ -278,13 +315,15 @@ export const Library = () => {
         label="OK"
         rounded
         icon="pi pi-check"
-        onClick={dialogType === "Add User" ? createUser : createBook}
+        onClick={() => selectDialog(dialogType)}
         autoFocus
       />
     </div>
   );
+
   return (
     <div className="card">
+      <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}
@@ -413,6 +452,19 @@ export const Library = () => {
               optionLabel="name"
               placeholder="Select a Book"
               className="w-full md:w-14rem"
+            />
+
+            <label htmlFor="score" className="font-bold block mb-2">
+              Score
+            </label>
+            <InputNumber
+              inputId="score"
+              value={score}
+              onValueChange={(e) => setScore(e.value)}
+              mode="decimal"
+              showButtons
+              min={0}
+              max={100}
             />
           </div>
         )}

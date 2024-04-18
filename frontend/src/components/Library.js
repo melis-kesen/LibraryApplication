@@ -444,7 +444,10 @@ export const Library = () => {
           </div>
         )}
         {dialogType === "Borrow Book" && (
-          <div className="card flex flex-wrap justify-content-center">
+          <div
+            style={{ display: "grid" }}
+            className="card flex flex-wrap justify-content-center"
+          >
             <Dropdown
               value={selectedUser}
               onChange={(e) => setSelectedUser(e.value)}
@@ -453,6 +456,7 @@ export const Library = () => {
               placeholder="Select a User"
               className="w-full md:w-14rem"
             />
+            <br></br>
             <Dropdown
               value={selectedBook}
               onChange={(e) => setSelectedBook(e.value)}
@@ -464,7 +468,10 @@ export const Library = () => {
           </div>
         )}
         {dialogType === "Return Book" && (
-          <div className="card flex flex-wrap justify-content-center">
+          <div
+            style={{ display: "grid" }}
+            className="card flex flex-wrap justify-content-center"
+          >
             <Dropdown
               value={selectedUser}
               onChange={(e) => setSelectedUser(e.value)}
@@ -473,6 +480,7 @@ export const Library = () => {
               placeholder="Select a User"
               className="w-full md:w-14rem"
             />
+            <br></br>
             <Dropdown
               value={selectedBook}
               onChange={(e) => setSelectedBook(e.value)}
@@ -481,7 +489,7 @@ export const Library = () => {
               placeholder="Select a Book"
               className="w-full md:w-14rem"
             />
-
+            <br></br>
             <label htmlFor="score" className="font-bold block mb-2">
               Score
             </label>

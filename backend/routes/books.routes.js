@@ -20,7 +20,7 @@ module.exports = function (app) {
    * Get the book with given id
    * @params id: id of the book
    */
-    app.get("/books/:bookId", controller.getBook);
+  app.get("/books/:bookId", controller.getBook);
   /**
    * Add new book
    */

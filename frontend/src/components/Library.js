@@ -133,7 +133,7 @@ export const Library = () => {
     }
   };
   const showUser = (rowData) => {
-    UserService.getUser(rowData.userId).then(
+    UserService.getUser(rowData.id).then(
       async (response) => {
         setPresentBook(response.books.present);
         setPastBook(response.books.past);
@@ -152,7 +152,7 @@ export const Library = () => {
     );
   };
   const showBook = (rowData) => {
-    BookService.getBook(rowData.bookId).then(
+    BookService.getBook(rowData.id).then(
       async (response) => {
         setVisibleRight(true);
         setAvgScore(response.score);
@@ -170,7 +170,7 @@ export const Library = () => {
     );
   };
   const borrowBook = () => {
-    if (selectedUser.userId === null || selectedBook.bookId === null) {
+    if (selectedUser === null || selectedUser?.id === null || selectedBook === null || selectedBook?.id === null) {
       toast.current.show({
         severity: "warn",
         summary: "WARNING",
@@ -179,8 +179,8 @@ export const Library = () => {
       });
     } else {
       const obj = {
-        userId: selectedUser.userId,
-        bookId: selectedBook.bookId,
+        userId: selectedUser.id,
+        bookId: selectedBook.id,
       };
       UserService.borrowBook(obj).then(
         async (response) => {
@@ -188,6 +188,12 @@ export const Library = () => {
           setSelectedBook("");
           setSelectedUser("");
           setScore(null);
+          toast.current.show({
+            severity: "success",
+            summary: "SUCCESS",
+            detail: response.message,
+            life: 3000,
+          });
         },
         (error) => {
           console.log(error.response);
@@ -202,9 +208,10 @@ export const Library = () => {
     }
   };
   const returnBook = () => {
-    if (
-      selectedUser.userId === null ||
-      selectedBook.bookId === null ||
+    if (selectedUser === null ||
+      selectedUser?.id === null ||
+      selectedBook?.id === null ||
+      selectedBook === null||
       score === null
     ) {
       toast.current.show({
@@ -215,8 +222,8 @@ export const Library = () => {
       });
     } else {
       const obj = {
-        bookId: selectedUser.userId,
-        userId: selectedBook.bookId,
+        userId: selectedUser.id,
+        bookId: selectedBook.id,
         score: score,
       };
       UserService.returnBook(obj).then(
@@ -250,7 +257,9 @@ export const Library = () => {
           outlined
           className="mr-2"
           onClick={
-            rowData.userId ? () => showUser(rowData) : () => showBook(rowData)
+            activeIndex === 0
+              ? () => showUser(rowData)
+              : () => showBook(rowData)
           }
           tooltip="Use for open details"
         />
@@ -344,7 +353,7 @@ export const Library = () => {
       >
         <TabPanel header="Users" leftIcon="pi pi-user">
           <DataTable value={users} tableStyle={{ minWidth: "50rem" }}>
-            <Column field="userId" header="ID"></Column>
+            <Column field="id" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
               header="Details"
@@ -358,7 +367,7 @@ export const Library = () => {
         </TabPanel>
         <TabPanel header="Books" leftIcon="pi pi-book">
           <DataTable value={books} tableStyle={{ minWidth: "50rem" }}>
-            <Column field="bookId" header="ID"></Column>
+            <Column field="id" header="ID"></Column>
             <Column field="name" header="Name"></Column>
             <Column
               header="Details"
@@ -382,21 +391,21 @@ export const Library = () => {
             <h2 style={{ textAlign: "center" }}>{userSidebarHeader}</h2>
             <div className="card flex justify-content-center">
               <p>
-                <b>Past Books:</b>
-              </p>
-              <ListBox
-                options={pastBook}
-                optionLabel="name"
-                className="w-full md:w-14rem"
-              />
-              <p>
                 <b>Present Books:</b>
               </p>
-              <ListBox
-                options={presentBook}
-                optionLabel="name"
-                className="w-full md:w-14rem"
-              />
+                 <DataTable value={presentBook} tableStyle={{ minWidth: "10rem" }}>
+                <Column field="name" header="Name"></Column>
+                <Column field="userScore" header="Score"></Column>
+
+          </DataTable>
+              <p>
+                <b>Past Books:</b>
+              </p>
+              <DataTable value={pastBook} tableStyle={{ minWidth: "10rem" }}>
+                <Column field="name" header="Name"></Column>
+                <Column field="userScore" header="Score"></Column>
+
+          </DataTable>
             </div>
           </div>
         )}

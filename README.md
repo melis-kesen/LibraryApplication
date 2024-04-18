@@ -22,7 +22,7 @@ An application has been developed to manage members and the borrowing of books b
 - In case of errors (such as attempting to borrow a book for a non-existent user, attempting to borrow a book already borrowed by someone else, etc.), the application catches the error and indicates an error in the API response (at least 500 Internal Server Error).
 
 #### Frontend development has been done for visualization purposes, utilizing React Hooks.
-![](./gif1.gif)
+![](./lib.gif)
 
 ## Installation
 
